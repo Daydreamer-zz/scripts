@@ -1,7 +1,9 @@
 #!/bin/sh
-datadir=/data
 basedir=/application/mysql
 password=199747
+socketdir=/var/lib/mysql/mysql.sock
+pidfile=/data/mysql.pid
+mysqlconfdir=/etc/my.cnf
 
 . /etc/init.d/functions
 [ $# -ne 1 ] && {
@@ -9,20 +11,20 @@ echo "USAGE:{start|stop|restart}"
 exit 1
 }
 start(){
-if [ -e $datadir/mysql.pid ]
+if [ -e $pidfile ]
 then
   echo "MySQL is running."
 else
-  $basedir/bin/mysqld_safe --defaults-file=$datadir/conf/my.cnf &>/dev/null &
+  $basedir/bin/mysqld_safe --defaults-file=$mysqlconfdir  &>/dev/null &
   action  "MySQL is starting" /bin/true
   exit 0
 fi
 }
 
 stop(){
-if [ -e $datadir/mysql.pid ]
+if [ -e $pidfile ]
 then
-  $basedir/bin/mysqladmin -uroot -p$password -S $datadir/mysql.sock shutdown &>/dev/null
+  $basedir/bin/mysqladmin -uroot -p$password -S $socketdir  shutdown &>/dev/null
   action "MySQL is stoping" /bin/true
 else
   action "MySQL is stoping" /bin/false
