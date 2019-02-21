@@ -1,4 +1,5 @@
 #!/bin/bash
+#LNMP安装脚本
 . /etc/init.d/functions
 echo -e "\033[32m1.安装nginx\n2.安装php\n3.安装mysql\n4.安装lnmp\n5.不做任何操作退出\033[0m"
 read -p "请输入你想安装的，序号:" a
