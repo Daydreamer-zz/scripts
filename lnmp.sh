@@ -1,5 +1,4 @@
 #!/bin/bash
-#LNMP安装脚本
 . /etc/init.d/functions
 echo -e "\033[32m1.安装nginx\n2.安装php\n3.安装mysql\n4.安装lnmp\n5.不做任何操作退出\033[0m"
 read -p "请输入你想安装的，序号:" a
@@ -52,7 +51,7 @@ php_install(){
   action "php安装成功"
   echo -e "拷贝配置文件中..."
   mv $php_path/php/etc/php-fpm.d/www.conf.default $php_path/php/etc/php-fpm.d/www.conf
-  cp php-7.2.12.tar.gz/php.ini-production $php_path/php/etc/php.ini
+  cp php-7.2.12/php.ini-production $php_path/php/etc/php.ini
 }
 
 mysql_install(){
