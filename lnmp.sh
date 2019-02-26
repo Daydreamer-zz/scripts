@@ -51,7 +51,8 @@ php_install(){
   action "php安装成功"
   echo -e "拷贝配置文件中..."
   mv $php_path/php/etc/php-fpm.d/www.conf.default $php_path/php/etc/php-fpm.d/www.conf
-  cp php-7.2.12/php.ini-production $php_path/php/etc/php.ini
+  cp php.ini-production $php_path/php/etc/php.ini
+  cd -
 }
 
 mysql_install(){
