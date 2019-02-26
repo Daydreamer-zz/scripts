@@ -1,8 +1,8 @@
 #!/bin/sh
 basedir=/application/mysql
 password=199747
-socketdir=/var/lib/mysql/mysql.sock
-pidfile=/data/mysql.pid
+socketdir=/data/mysql.sock
+pidfile=/data/mysqld_safe.pid
 mysqlconfdir=/etc/my.cnf
 
 . /etc/init.d/functions
