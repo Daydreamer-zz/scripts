@@ -1,6 +1,6 @@
 #!/bin/bash
 pidfile=/application/nginx/logs/nginx.pid
-nginx=/application/nginx/sbin/nginx
+nginxdir=/application/nginx/sbin/nginx
 . /etc/init.d/functions
 start(){
   if [ -f $pidfile ] ; then
