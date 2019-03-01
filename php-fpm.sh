@@ -2,7 +2,6 @@
 . /etc/init.d/functions
 phpdir=/application
 pidfile=$phpdir/php/var/run/php-fpm.pid
-pid=`cat $pidfile`
 start(){
   if [ -f $pidfile ];then
     action "php-fpm is now running!" /bin/false
@@ -14,9 +13,13 @@ start(){
 }
 
 stop(){
-kill $pid
-action "php-fpm is now stop" /bin/false
-
+  pid=`cat $pidfile`
+  if [ -f $pidfile ];then
+    kill $pid
+    action "php-fpm is now stop" /bin/false
+  else
+    action "php-fpm is  not running" /bin/false
+  fi
 }
 
 
