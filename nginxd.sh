@@ -1,19 +1,19 @@
 #!/bin/bash
 pidfile=/application/nginx/logs/nginx.pid
-nginxdir=/application/nginx/sbin/nginx
+nginxdir=/application
 . /etc/init.d/functions
 start(){
   if [ -f $pidfile ] ; then
     echo "nginx is now running"
   else 
-    $nginx
+    $nginxdir/nginx/sbin/nginx
     action "nginx is started" /bin/true 
   fi
 }
 
 stop(){
   if [ -f $pidfile ] ; then
-    $nginx -s stop
+    $nginxdir/nginx/sbin/nginx -s stop
     action "nginx is stop" /bin/true
   else
     action "nginx is not runing"  /bin/false
@@ -22,7 +22,7 @@ stop(){
 
 reload(){
  if [ -f $pidfile ] ; then 
-   $nginx -s reload
+   $nginxdir/nginx/sbin/nginx -s reload
    action "nginx is reload" /bin/true
  else 
    action "nginx is not runing" /bin/false
