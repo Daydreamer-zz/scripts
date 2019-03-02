@@ -4,7 +4,7 @@ phpdir=/application
 pidfile=$phpdir/php/var/run/php-fpm.pid
 start(){
   if [ -f $pidfile ];then
-    action "php-fpm is now running!" /bin/false
+    action "php-fpm is running now!" /bin/false
   else
     $phpdir/php/sbin/php-fpm -c $phpdir/php/etc/php.ini -y $phpdir/php/etc/php-fpm.conf
     action "php-fpm successful start" /bin/true
@@ -13,12 +13,11 @@ start(){
 }
 
 stop(){
-  pid=`cat $pidfile`
   if [ -f $pidfile ];then
-    kill $pid
-    action "php-fpm is now stop" /bin/false
+    kill -15 `cat $pidfile`
+    action "php-fpm stopped" /bin/true
   else
-    action "php-fpm is  not running" /bin/false
+    action " u cant stop,php-fpm is not  running" /bin/false
   fi
 }
 
