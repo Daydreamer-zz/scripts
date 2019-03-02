@@ -25,17 +25,20 @@ nginx_install(){
   fi
   wget http://nginx.org/download/nginx-1.14.2.tar.gz
   tar zxvf nginx-1.14.2.tar.gz
-  cd nginx-1.14.2 && ./configure --prefix=$nginx_path/nginx --user=nginx --group=nginx --with-http_stub_status_module --with-http_ssl_module && make && make install && cd -
+  cd nginx-1.14.2 && ./configure --prefix=$nginx_path/nginx --user=nginx --group=nginx --with-http_stub_status_module --with-http_ssl_module && make && make install
   action "nginx安装成功" /bin/true
+  cd ..
 }
 
 php_install(){
   echo -e "\033[31mnow install php\033[0m"
   read -p "php安装路径:" php_path
+  wget https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+  wget http://be2.php.net/distributions/php-5.6.26.tar.gz
   echo -e "\033[31安装依赖\033[0m"
   yum install -y gcc-c++ zlib-devel libxml2-devel libjpeg-devel libjpeg-turbo-devel libiconv-devel freetype-devel libpng-evel gd-devel libcurl-devel libxslt-devel libmcrypt-devel mhash mcrypt
   echo -e "\033[31安装libiconv库\033[0m"
-  tar zxvf libiconv-1.15.tar.gz && cd libiconv-1.15/ && ./configure --prefix=/usr/local/libiconv && make && make install && cd /root
+  tar zxvf libiconv-1.15.tar.gz && cd libiconv-1.15/ && ./configure --prefix=/usr/local/libiconv && make && make install && cd ..
   if [ -d $php_path ]
   then
     echo -e "\033[32mgood，此路径存在，解压文件中....\033[0m"
@@ -44,20 +47,21 @@ php_install(){
     mkdir -p $php_path
     action "文件夹创建成功" /bin/true
   fi
-  tar zxvf php-7.2.12.tar.gz
-  cd php-7.2.12/
+  tar zxvf php-5.6.26.tar.gz
+  cd php-5.6.26/
   ./configure --prefix=$php_path/php --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir=/usr/local/libiconv --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl --enable-mbregex --enable-fpm --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --enable-short-tags --enable-static --with-xsl --with-fpm-user=nginx --with-fpm-group=nginx --enable-ftp --with-pear --enable-phar
-  make && make install $$ cd -
+  make && make install 
   action "php安装成功"
   echo -e "拷贝配置文件中..."
-  mv $php_path/php/etc/php-fpm.d/www.conf.default $php_path/php/etc/php-fpm.d/www.conf
+  mv $php_path/php/etc/php-fpm.conf.default $php_path/php/etc/php-fpm.conf
   cp php.ini-production $php_path/php/etc/php.ini
-  cd -
+  cd ..
 }
 
 mysql_install(){
   echo -e  "\033[31mnow install mysql\033[0m"
   read -p "mysql安装路径:" mysql_path
+  wget  https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
   if [ -d $mysql_path ]
   then
     echo -e "\033[32mgood，此路径存在，解压文件中....\033[0m"
@@ -68,7 +72,7 @@ mysql_install(){
   fi
   echo -e "\033[33m检测mysql用户\033[0m" 
   b=`grep "mysql" /etc/passwd|wc -l`
-  if [ "$a" == "1" ]
+  if [ "$b" == "1" ]
   then
     echo -e "\033[32mgood,mysql用户存在\033[0m"
   else
@@ -76,12 +80,73 @@ mysql_install(){
     useradd mysql -s /sbin/nologin -M
   fi
   echo -e "\033[33m安装依赖\033[0m"
-  tar zxvf mysql-5.7.24-linux-glibc2.12-x86_64.tar.gz -C $mysql_path
+  echo -e "\033[33m解压文件中......\033[0m"
+  tar xf mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz -C $mysql_path
   action "解压文件成功" /bin/true
-  echo -e "\033[31m拷贝配置文件(默认覆盖原配置文件)....\033[0m"
-  cp -f my.cnf /etc
-  action "拷贝配置文件成功" /bin/true
-  mv $mysql_path/mysql-5.7.24-linux-glibc2.12-x86_64 $mysql_path/mysql
+  mv $mysql_path/mysql-5.7.25-linux-glibc2.12-x86_64 $mysql_path/mysql
+}
+
+LNMP(){
+  read -p "LNMP安装路径(绝对路径):  " lnmp_path
+  if [ -d $lnmp_path ]
+  then
+    echo -e  "\033[32mgood,$lnmp_path存在\033[0m"
+  else
+    echo -e "\033[31m$lnmp_path不存在，创建中....\033[0m" 
+    mkdir -p $lnmp_path
+  fi
+  echo -e "\033[31mnow install nginx\033[0m"
+  echo -e "安装环境"
+  yum install -y gcc-c++ openssl openssl-devel pcre pcre-devel
+  echo -e "\033[33m检测nginx用户\033[0m"
+  a=`grep "nginx" /etc/passwd|wc -l`
+  if [ "$a" == "1" ]
+  then
+    echo -e "\033[32mgood,nginx用户存在\033[0m"
+  else
+    echo -e "\033[31mnginx用户不存在,添加中.....\033[0m"
+    useradd nginx -s /sbin/nologin -M
+  fi
+  wget http://nginx.org/download/nginx-1.14.2.tar.gz
+  tar zxvf nginx-1.14.2.tar.gz
+  cd nginx-1.14.2 && ./configure --prefix=$lnmp_path/nginx --user=nginx --group=nginx --with-http_stub_status_module --with-http_ssl_module && make && make install
+  action "nginx安装成功" /bin/true
+  cd ..
+
+  wget https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+  wget http://be2.php.net/distributions/php-5.6.26.tar.gz
+  echo -e "\033[31安装依赖\033[0m"
+  yum install -y gcc-c++ zlib-devel libxml2-devel libjpeg-devel libjpeg-turbo-devel libiconv-devel freetype-devel libpng-evel gd-devel libcurl-devel libxslt-devel libmcrypt-devel mhash mcrypt
+  echo -e "\033[31安装libiconv库\033[0m"
+  tar zxvf libiconv-1.15.tar.gz && cd libiconv-1.15/ && ./configure --prefix=/usr/local/libiconv && make && make install && cd ..
+  tar zxvf php-5.6.26.tar.gz
+  cd php-5.6.26/
+  ./configure --prefix=$lnmp_path/php --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir=/usr/local/libiconv --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl --enable-mbregex --enable-fpm --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --enable-short-tags --enable-static --with-xsl --with-fpm-user=nginx --with-fpm-group=nginx --enable-ftp --with-pear --enable-phar
+  make && make install
+  action "php安装成功"
+  echo -e "拷贝配置文件中..."
+  mv $lnmp_path/php/etc/php-fpm.conf.default $lnmp_path/php/etc/php-fpm.conf
+  cp php.ini-production $lnmp_path/php/etc/php.ini
+  cd ..
+  
+  wget  https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
+  echo -e "\033[33m检测mysql用户\033[0m" 
+  b=`grep "mysql" /etc/passwd|wc -l`
+  if [ "$b" == "1" ]
+  then
+    echo -e "\033[32mgood,mysql用户存在\033[0m"
+  else
+    echo -e "\033[31mmysql用户不存在,添加中.....\033[0m"
+    useradd mysql -s /sbin/nologin -M
+  fi
+  echo -e "\033[33m安装依赖\033[0m"
+  tar zxvf mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz -C $lnmp_path
+  action "解压文件成功" /bin/true
+  mv $lnmp_path/mysql-5.7.25-linux-glibc2.12-x86_64 $lnmp_path/mysql
+  
+  action "LNMP环境安装成功"  /bin/true
+
+
 }
 
 case $a in
@@ -95,9 +160,7 @@ case $a in
     mysql_install;
   ;;
   4)
-    nginx_install;
-    php_install;
-    mysql_install;
+    LNMP;
   ;;
   5)
     exit 0;
