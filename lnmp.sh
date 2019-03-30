@@ -152,7 +152,7 @@ LNMP(){
   tar xf mysql-5.6.43.tar.gz && cd mysql-5.6.43/
   /usr/local/cmake/bin/cmake -DCMAKE_INSTALL_PREFIX=$lnmp_path/mysql -DMYSQL_UNIX_ADDR=$lnmp_path/mysql/tmp/mysql.sock -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1  -DMYSQL_TCP_PORT=3306 -DMYSQL_USER=mysql -DENABLE_DOWNLOADS=1 -DMYSQL_USER=mysql
   make && make install
-  cp /usr/local/mysql/support-files/mysql.server /etc/init.d/
+  cp $lnmp_path/mysql/support-files/mysql.server /etc/init.d/
 
   action "LNMP环境安装成功" /bin/true
 }
