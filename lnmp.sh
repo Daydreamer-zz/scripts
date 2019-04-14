@@ -34,7 +34,7 @@ php_install(){
   echo -e "\033[31mnow install php\033[0m"
   read -p "php安装路径:" php_path
   wget https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
-  wget http://be2.php.net/distributions/php-5.6.30.tar.gz
+  wget http://39.105.62.80/wp-content/uploads/2019/04/php-5.6.30.tar.gz
   echo -e "\033[31安装依赖\033[0m"
   yum install -y gcc-c++ zlib-devel libxml2-devel libjpeg-devel libjpeg-turbo-devel libiconv-devel freetype-devel libpng-evel gd-devel libcurl-devel libxslt-devel libmcrypt-devel mhash mcrypt
   echo -e "\033[31安装libiconv库\033[0m"
@@ -119,7 +119,7 @@ LNMP(){
   cd ..
 
   wget https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
-  wget http://be2.php.net/distributions/php-5.6.30.tar.gz
+  wget http://39.105.62.80/wp-content/uploads/2019/04/php-5.6.30.tar.gz
   echo -e "\033[31安装依赖\033[0m"
   yum install -y gcc-c++ zlib-devel libxml2-devel libjpeg-devel libjpeg-turbo-devel libiconv-devel freetype-devel libpng-devel gd-devel libcurl-devel libxslt-devel libmcrypt-devel mhash mcrypt
   echo -e "\033[31安装libiconv库\033[0m"
