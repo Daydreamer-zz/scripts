@@ -1,7 +1,26 @@
 #!/bin/bash
 . /etc/init.d/functions
-echo -e "\033[32m1.安装nginx\n2.安装php\n3.安装mysql\n4.安装lnmp\n5.不做任何操作退出\033[0m"
-read -p "请输入你想安装的，序号:" a
+cat <<EOF
+
+==================
+
+echo
+
+1.[install nginx]
+
+2.[install php]
+
+3.[install mysql]
+
+4.[install lnmp]
+
+5.[exit]
+
+==================
+
+EOF
+
+read -p "pls input the num you want:" a
 nginx_install(){
   read -p "你想把nginx安装到哪里(绝对路径):" nginx_path
   echo -e "\033[31mnow install nginx\033[0m"
