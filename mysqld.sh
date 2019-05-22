@@ -1,5 +1,5 @@
 #!/bin/sh
-basedir=/application/mysql
+basedir=/usr/local/mysql
 password=199747
 socketdir=/data/mysql.sock
 pidfile=/data/mysqld_safe.pid
