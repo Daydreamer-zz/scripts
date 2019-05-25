@@ -1,5 +1,5 @@
 #!/bin/bash
-#监控集群状态
+#监控主机状态
 #auther by Sun Hongze
 time_now=`date '+%Y-%m-%d %H:%M:%S'`
 log_file=/cluster/Monitoring.log
@@ -45,7 +45,7 @@ get_memory_usage(){
 
 #获取磁盘占用率
 get_disk_usage(){
-   MOUNT_POINT=`df -hl | egrep -wv  '^tmpfs|Filesystem|boot' | awk '{print$NF}'`
+   MOUNT_POINT=`df -hl | egrep -wv  '^tmpfs|Filesystem|boot' | awk '{print $NF}'`
      for i in $MOUNT_POINT;
      do
          DISK_USAGE=`df -hl "$i" | awk 'NR==2 {print $5}'`
