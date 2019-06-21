@@ -30,11 +30,26 @@ cat << EOF >> /etc/security/limits.conf
 * hard nproc 4096
 EOF
 cat <<EOF >>/etc/sysctl.conf
-net.ipv4.tcp_syncookies = 1
-#表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击
+net.core.netdev_max_backlog = 32768
+net.core.somaxconn = 32768
+net.core.wmem_default = 8388608
+net.core.rmem_default = 8388608
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+
+net.ipv4.route.gc_timeout = 100
+net.ipv4.tcp_fin_timeout = 30
+net.ipv4.tcp_keepalive_time = 1200
+net.ipv4.tcp_mem = 94500000 915000000 927000000
+net.ipv4.tcp_synack_retries = 2
+
+net.ipv4.tcp_syncookies = 0
+#表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击，高并发系统可以关闭
 
 net.ipv4.tcp_tw_reuse = 1
 #表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接
+
+net.ipv4.tcp_timestamps = 0
 
 net.ipv4.tcp_tw_recycle = 1
 #表示开启TCP连接中TIME-WAIT sockets的快速回收
@@ -45,7 +60,7 @@ net.ipv4.tcp_fin_timeout = 30
 net.ipv4.tcp_max_tw_buckets = 8000
 #表示系统同时保持TIME_WAIT的最大数量，如果超过这个数字，TIME_WAIT将立刻被清除并打印警告信息。默 认为180000，改为6000。
 
-net.ipv4.ip_local_port_range = 10000 65000
+net.ipv4.ip_local_port_range = 1024 65000
 #增大可用端口范围
 
 net.ipv4.tcp_max_syn_backlog = 8192
