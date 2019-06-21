@@ -6,7 +6,7 @@ log_file=/cluster/Monitoring.log
 
 LOAD_AVERAGE_ALARM=2
 CPU_ALARM=70
-MEMORY_ALARM=70
+MEMORY_ALARM=50
 IN_NETWORK_TRAFFIC_ALARM=10240
 OUT_NETWORK_TRAFFIC_ALARM=10240
 
@@ -71,15 +71,15 @@ get_network_traffic
 
 NETWORK_INPUT=`echo ${NETWORK_TRAFFIC}|awk '{print $2}'`
 NETWORK_OUTPUT=`echo ${NETWORK_TRAFFIC}|awk '{print $5}'`
-
+GET_LOG=`tail -n 10 $log_file |grep 'status' -A 10`
 if [ `echo "$LOAD_AVERAGE > $LOAD_AVERAGE_ALARM"|bc` -eq 1 ];then
-  python /root/sendmail.py "load average is high" "`tail -7 $log_file`"
+  python3 /root/sendmail.py "load average is high" "$GET_LOG"
 elif [ `echo "$CPU_USAGE > $CPU_ALARM"|bc` -eq 1 ];then
-  python /root/sendmail.py "cpu load is high" "`tail -7 $log_file`"
+  python3 /root/sendmail.py "cpu load is high" "$GET_LOG"
 elif [ `echo "$MEMORY_USAGE > $MEMORY_ALARM"|bc` -eq 1 ];then
-  python /root/sendmail.py "mem use is high" "`tail -7 $log_file`"
+  python3 /root/sendmail.py "mem use is high" "$GET_LOG"
 elif [ `echo "$NETWORK_INPUT > $IN_NETWORK_TRAFFIC_ALARM"|bc` -eq 1 ];then
-  python /root/sendmail.py "network input is high" "`tail -7 $log_file`"
+  python3 /root/sendmail.py "network input is high" "$GET_LOG"
 elif [ `echo "$NETWORK_OUTPUT > $OUT_NETWORK_TRAFFIC_ALARM"|bc` -eq 1 ];then
-  python /root/sendmail.py "network output is high" "`tail -7 $log_file`"
+  python3 /root/sendmail.py "network output is high" "$GET_LOG"
 fi
