@@ -31,10 +31,16 @@ cat << EOF >> /etc/security/limits.conf
 EOF
 cat <<EOF >>/etc/sysctl.conf
 net.core.netdev_max_backlog = 32768
+#每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目
+
 net.core.somaxconn = 32768
+
+
 net.core.wmem_default = 8388608
 net.core.rmem_default = 8388608
+#最大socket读buffer
 net.core.rmem_max = 16777216
+#最大socket写buffer
 net.core.wmem_max = 16777216
 
 net.ipv4.route.gc_timeout = 100
@@ -70,7 +76,7 @@ sysctl -p
 }
 
 packages(){
-yum install -y gcc-c++ screen lrzsz tree openssl telnet iftop iotop sysstat wget dos2unix lsof net-tools unzip zip vim-enhanced bind-utils yum-utils nmap bash-completion libaio-0.3.109-13.el7 vim htop ntpdate chrony
+yum install -y gcc-c++ screen lrzsz tree openssl telnet iftop iotop sysstat wget dos2unix lsof net-tools unzip zip vim-enhanced bind-utils yum-utils nmap bash-completion libaio-0.3.109-13.el7 vim htop ntpdate chrony bc
 }
 
 security(){
