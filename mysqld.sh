@@ -1,6 +1,5 @@
 #!/bin/sh
-# chkconfig: 345 85 15
-# description: Thisis a test service.
+#this script is to start mysql
 basedir=/usr/local/mysql
 password=199747
 socketdir=/data/mysql.sock
