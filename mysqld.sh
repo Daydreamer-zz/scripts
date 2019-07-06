@@ -1,4 +1,6 @@
 #!/bin/sh
+# chkconfig: 345 85 15
+# description: Thisis a test service.
 basedir=/usr/local/mysql
 password=199747
 socketdir=/data/mysql.sock
@@ -38,15 +40,16 @@ restart(){
   start
 }
 
-if [ "$1" == "start" ]
-then
+case $1 in
+  start)
   start
-elif [ "$1" == "stop" ]
-then
+  ;;
+  stop)
   stop
-elif [ "$1" == "restart" ]
-then
+  ;;
+  restart)
   restart
-else
-  echo "USAGE:{start|stop|restart}" 
-fi
+  ;;
+  *)
+  echo 'service accept arguments start|stop|restart'
+esac
