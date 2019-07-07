@@ -76,7 +76,7 @@ sysctl -p
 }
 
 packages(){
-yum install -y gcc-c++ screen lrzsz tree openssl telnet iftop iotop sysstat wget dos2unix lsof net-tools unzip zip vim-enhanced bind-utils yum-utils nmap bash-completion libaio-0.3.109-13.el7 vim htop ntpdate chrony bc
+yum install -y gcc-c++ screen lrzsz tree openssl telnet iftop iotop sysstat wget dos2unix lsof net-tools unzip zip vim-enhanced bind-utils yum-utils nmap bash-completion libaio-0.3.109-13.el7 vim htop ntpdate chrony bc autoconf expat-devel
 }
 
 security(){
@@ -84,11 +84,16 @@ sed -i 's#SELINUX=enforcing#SELINUX=disabled#g' /etc/selinux/config
 systemctl disable firewalld.service
 systemctl stop firewalld.service
 chmod +x /etc/rc.d/rc.local
+systemctl list-unit-files|egrep "^ab|^aud|^kdump|vm|^md|^mic|^post|lvm"  |awk '{print $1}'|sed -r 's#(.*)#systemctl disable &#g'|bash
+echo 'export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "' >> /etc/profile
+source /etc/profile
+sed -i "s/^#UseDNS yes/UseDNS no/g" /etc/ssh/sshd_config
+sed -i "s/GSSAPIAuthentication yes/GSSAPIAuthentication no/g" /etc/ssh/sshd_config
 }
 
 updatetime(){
 yum install -y ntp
-echo "* 4 * * * /usr/sbin/ntpdate ntp.aliyun.com > /dev/null 2>&1" >> /var/spool/cron/root
+echo "00 00 * * * /usr/sbin/ntpdate ntp.aliyun.com > /dev/null 2>&1" >> /var/spool/cron/root
 }
 
 kernel
