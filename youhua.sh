@@ -1,21 +1,22 @@
 #!/bin/bash
 #优化新机器
 repos(){
-yum install -y wget
 version=`cat /etc/redhat-release |awk -F '[ .]' '{print $4}'`
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
 rm -rf /etc/yum.repos.d/*.repo
 if [ $version -eq 7 ];then
   echo 'your machine is CentOS7'
-  wget https://mirrors.aliyun.com/repo/epel-7.repo -O /etc/yum.repos.d/epel.repo
-  wget http://mirrors.aliyun.com/repo/Centos-7.repo -O /etc/yum.repos.d/CentOS-Base.repo
+  curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+  curl -o /etc/yum.repos.d/epel.repo  https://mirrors.aliyun.com/repo/epel-7.repo
 elif [ $version -eq 6 ];then
   echo 'your machine is Centos6'
-  wget http://mirrors.aliyun.com/repo/epel-6.repo -O /etc/yum.repos.d/epel.repo
-  wget http://mirrors.aliyun.com/repo/Centos-6.repo -O /etc/yum.repos.d/CentOS-Base.repo
+  curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-6.repo
+  wget -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
 else
   echo 'error!!!'
 fi
+sed -i "s#enabled=1#enabled=0#g" /etc/yum/pluginconf.d/fastestmirror.conf
+sed -i "s#plugins=1#plugins=0#g" /etc/yum.conf
 yum clean all
 yum makecache
 }
@@ -76,7 +77,7 @@ sysctl -p
 }
 
 packages(){
-yum install -y gcc-c++ screen lrzsz tree openssl telnet iftop iotop sysstat wget dos2unix lsof net-tools unzip zip vim-enhanced bind-utils yum-utils nmap bash-completion libaio-0.3.109-13.el7 vim htop ntpdate chrony bc autoconf expat-devel
+yum install -y gcc-c++ screen wget lrzsz tree openssl telnet iftop iotop sysstat dos2unix lsof net-tools unzip zip  bind-utils yum-utils nmap bash-completion libaio-0.3.109-13.el7 vim htop ntpdate bc autoconf expat-devel
 }
 
 security(){
@@ -89,6 +90,7 @@ echo 'export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "' >> /etc/profile
 source /etc/profile
 sed -i "s/^#UseDNS yes/UseDNS no/g" /etc/ssh/sshd_config
 sed -i "s/GSSAPIAuthentication yes/GSSAPIAuthentication no/g" /etc/ssh/sshd_config
+systemctl restart sshd
 }
 
 updatetime(){
