@@ -31,6 +31,10 @@ cat << EOF >> /etc/security/limits.conf
 * hard nproc 4096
 EOF
 cat <<EOF >>/etc/sysctl.conf
+
+net.ipv6.conf.all.disable_ipv6 = 1
+#禁用ipv6
+
 net.core.netdev_max_backlog = 32768
 #每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目
 
