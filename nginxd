@@ -1,0 +1,20 @@
+#!/bin/bash
+#chkconfig: 2345 80 90
+#description:auto_run
+nginxdir=/usr/local/nginx
+case $1 in
+  start)
+    echo "check config"
+    $nginxdir/sbin/nginx -t
+    if [ $? -eq 0 ];then
+      $nginxdir/sbin/nginx
+    else
+      echo "nginx config check error"
+    fi
+  ;;
+  stop)
+    $nginxdir/sbin/nginx -s stop
+  ;;
+  reload)
+    $nginxdir/sbin/nginx -s reload
+esac
