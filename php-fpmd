@@ -2,13 +2,13 @@
 #chkconfig: 2345 80 90
 #description:auto_run
 . /etc/init.d/functions
-phpdir=/usr/local/
-pidfile=$phpdir/php/var/run/php-fpm.pid
+phpdir=/usr/local/php
+pidfile=$phpdir/var/run/php-fpm.pid
 start(){
   if [ -f $pidfile ];then
     action "php-fpm is running now!" /bin/false
   else
-    $phpdir/php/sbin/php-fpm -c $phpdir/php/etc/php.ini -y $phpdir/php/etc/php-fpm.conf
+    $phpdir/sbin/php-fpm -c $phpdir/etc/php.ini -y $phpdir/etc/php-fpm.conf
     action "php-fpm successful start" /bin/true
   fi
 
