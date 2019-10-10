@@ -11,7 +11,7 @@ if [ $version -eq 7 ];then
 elif [ $version -eq 6 ];then
   echo 'your machine is Centos6'
   curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-6.repo
-  wget -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
+  curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
 else
   echo 'error!!!'
 fi
