@@ -81,7 +81,7 @@ sysctl -p
 }
 
 packages(){
-yum install -y gcc-c++ screen wget lrzsz tree openssl telnet iftop iotop sysstat dos2unix lsof net-tools unzip zip  bind-utils yum-utils nmap bash-completion libaio-0.3.109-13.el7 vim htop ntpdate bc autoconf expat-devel
+yum install -y gcc-c++ screen wget lrzsz tree openssl telnet iftop iotop sysstat dos2unix lsof net-tools unzip zip  bind-utils yum-utils nmap psmisc  bash-completion libaio-0.3.109-13.el7 vim htop ntpdate bc autoconf expat-devel
 }
 
 security(){
